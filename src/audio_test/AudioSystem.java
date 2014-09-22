@@ -22,15 +22,6 @@ public class AudioSystem {
     public static void init() {
         bgm_volumn = 80;
         se_volumn = 60;
-//        AudioFormat bgm_format = new AudioFormat(PCM_SIGNED, (float) 44100.0, 16, 2, 4, (float) 44100.0, false);
-//        DataLine.Info bgm_info = new DataLine.Info(SourceDataLine.class, bgm_format);
-//
-//        try {
-//            auline = (SourceDataLine) javax.sound.sampled.AudioSystem.getLine(bgm_info);
-//            auline.open();
-//        } catch (LineUnavailableException ex) {
-//        }
-//        auline.start();
     }
 
     //one at a time. once starting a new bgm, stop the playing one
@@ -87,7 +78,6 @@ public class AudioSystem {
             at.changeVolumn(volumn);
         }
         bgm_volumn = volumn;
-//        format = new AudioFormat("PCM_SIGNED 44100.0 Hz", "16 bit", stereo, 4 bytes/frame, little-endian);
     }
 
     public static int getBgmVolumn() {
@@ -113,8 +103,6 @@ public class AudioSystem {
         public void nextMusic() {
             Random rs = new Random(System.currentTimeMillis());
             int index = rs.nextInt(audio_list.length);
-//            System.out.println(index);
-//            System.out.println("data\\music\\" + audio_list[index]);
             at = new Audio("data\\music\\" + audio_list[index], false);
             at.initAudioVolumn(new AudioListenerVolumn() {
 
