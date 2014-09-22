@@ -134,7 +134,7 @@ public class Audio extends Thread {
     }
 
     public void changeVolumn(int volumn) {
-        float new_volumn = 35 + volumn * 65 / 100.0f;
+        float new_volumn = 30 + volumn * 70 / 100.0f;
         FloatControl volctrl = (FloatControl) auline.getControl(FloatControl.Type.MASTER_GAIN);
         float min = volctrl.getMinimum();
         //System.out.println(min);
