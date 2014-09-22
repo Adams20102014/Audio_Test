@@ -39,8 +39,6 @@ public class Audio extends Thread {
     private AudioListener al = null;
     private AudioListenerVolumn alv = null;
     private SourceDataLine auline = null;
-    
-    
 
 //2.构造函数，初始化filename
     public Audio(String filename, boolean loop) {
@@ -62,11 +60,11 @@ public class Audio extends Thread {
             al.nextMusic();
         }
     }
-    
+
     public void initAudioVolumn(AudioListenerVolumn alv) {
         this.alv = alv;
     }
- 
+
     public void initVolumn() {
         alv.initMusicVolumn();
     }
@@ -98,12 +96,12 @@ public class Audio extends Thread {
             auline = (SourceDataLine) AudioSystem.getLine(info);
 ////打开具有指定格式的行，这样可使行获得所有所需系统资源并变得可操作
             auline.open();
-           
+
         } catch (LineUnavailableException e) {
         }
 //允许某一个数据行执行数据i/o
         auline.start();
-        
+
         initVolumn();
 
 //写出数据
@@ -134,15 +132,19 @@ public class Audio extends Thread {
             finish();
         }
     }
-    
+
     public void changeVolumn(int volumn) {
-            FloatControl volctrl = (FloatControl) auline.getControl(FloatControl.Type.MASTER_GAIN);
-            float min = volctrl.getMinimum();
-            //System.out.println(min);
-            float max = volctrl.getMaximum();
-            //System.out.println(max);
-            float width = max - min;
-            float f_volumn = min + (volumn * width / 100.0f);
-            volctrl.setValue(f_volumn);
+        float new_volumn = 35 + volumn * 65 / 100.0f;
+        FloatControl volctrl = (FloatControl) auline.getControl(FloatControl.Type.MASTER_GAIN);
+        float min = volctrl.getMinimum();
+        //System.out.println(min);
+        float max = volctrl.getMaximum();
+        //System.out.println(max);
+        float width = max - min;
+        float f_volumn = min + (new_volumn * width / 100.0f);
+        System.out.println(volumn);
+        System.out.println(f_volumn);
+        volctrl.setValue(f_volumn);
+
     }
 }

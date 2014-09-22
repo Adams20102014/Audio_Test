@@ -35,7 +35,7 @@ public class AudioSystem {
 
     //one at a time. once starting a new bgm, stop the playing one
     public static void playBgm(String filename, boolean loop) {
-        at = new Audio("data\\music\\111.wav", loop);
+        at = new Audio(filename, loop);
         at.initAudioVolumn(new AudioListenerVolumn() {
 
             @Override
@@ -83,7 +83,9 @@ public class AudioSystem {
 
     //0~100
     public static void setBgmVolumn(int volumn) {
-        at.changeVolumn(volumn);
+        if (at != null) {
+            at.changeVolumn(volumn);
+        }
         bgm_volumn = volumn;
 //        format = new AudioFormat("PCM_SIGNED 44100.0 Hz", "16 bit", stereo, 4 bytes/frame, little-endian);
     }
@@ -95,7 +97,9 @@ public class AudioSystem {
 
     //0~100
     public static void setSeVolumn(int volumn) {
-        sound_effect.changeVolumn(volumn);
+        if (sound_effect != null) {
+            sound_effect.changeVolumn(volumn);
+        }
         se_volumn = volumn;
     }
 
