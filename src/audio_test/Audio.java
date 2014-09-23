@@ -39,6 +39,7 @@ public class Audio extends Thread {
     private AudioListener al = null;
     private AudioListenerVolumn alv = null;
     private SourceDataLine auline = null;
+    private AudioFormat format = null;
 
 //2.构造函数，初始化filename
     public Audio(String filename, boolean loop) {
@@ -75,21 +76,27 @@ public class Audio extends Thread {
 //1.定义一个文件对象引用，指向名为filename那个文件
         File sourceFile = new File(filename);
         // System.out.println(sourceFile.getAbsolutePath());
-//定义一个AudioInputStream用于接收输入的音频数据
+//2定义一个AudioInputStream用于接收输入的音频数据
         AudioInputStream audioInputStream = null;
-//使用AudioSystem来获取音频的音频输入流
+//3使用AudioSystem来获取音频的音频输入流
         try {
             audioInputStream = AudioSystem.getAudioInputStream(sourceFile);
         } catch (UnsupportedAudioFileException e) {
         } catch (IOException e) {
         }
 //4,用AudioFormat来获取AudioInputStream的格式
-        AudioFormat format = audioInputStream.getFormat();
+        format = audioInputStream.getFormat();
+
+        if (format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
+            format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, format.getSampleRate(), 16, format.getChannels(), format.getChannels() * 2, format.getSampleRate(),false);
+            audioInputStream = AudioSystem.getAudioInputStream(format, audioInputStream);
+        }
+
 //        System.out.println(format.toString());
 //        System.out.println(format.getEncoding() + "\n" + format.getSampleRate() + "\n" + format.getSampleSizeInBits() + "\n" + format.getChannels() + "\n" + format.getFrameSize() + "\n" + format.getFrameRate() + "\n");
 //5.源数据行SoureDataLine是可以写入数据的数据行
 //获取受数据行支持的音频格式DataLine.info
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format, AudioSystem.NOT_SPECIFIED);
 
         //获得与指定info类型相匹配的行
         try {
@@ -142,8 +149,8 @@ public class Audio extends Thread {
         //System.out.println(max);
         float width = max - min;
         float f_volumn = min + (new_volumn * width / 100.0f);
-        System.out.println(volumn);
-        System.out.println(f_volumn);
+//        System.out.println(volumn);
+//        System.out.println(f_volumn);
         volctrl.setValue(f_volumn);
 
     }

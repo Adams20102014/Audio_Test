@@ -274,7 +274,7 @@ public class Audio_Test extends JFrame {
                 if (pathname.isDirectory()) {
                     return false;
                 } else {
-                    return pathname.isFile() && pathname.getName().endsWith(".wav");
+                    return pathname.isFile() && (pathname.getName().endsWith(".wav") || pathname.getName().endsWith(".ogg"));
                 }
             }
 
@@ -294,7 +294,7 @@ public class Audio_Test extends JFrame {
                 if (pathname.isDirectory()) {
                     return false;
                 } else {
-                    return pathname.isFile() && pathname.getName().endsWith(".wav");
+                    return pathname.isFile() && (pathname.getName().endsWith(".wav") || pathname.getName().endsWith(".ogg"));
                 }
             }
 
