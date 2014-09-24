@@ -82,7 +82,6 @@ public class AudioSystem {
 
     public static int getBgmVolumn() {
         return bgm_volumn;
-//        format = new AudioFormat("PCM_SIGNED 44100.0 Hz", "16 bit", stereo, 4 bytes/frame, little-endian);
     }
 
     //0~100
