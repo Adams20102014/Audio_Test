@@ -40,6 +40,7 @@ public class Audio extends Thread {
     private AudioListenerVolumn alv = null;
     private SourceDataLine auline = null;
     private AudioFormat format = null;
+    private boolean isWave = true;
 
 //2.构造函数，初始化filename
     public Audio(String filename, boolean loop) {
@@ -78,6 +79,7 @@ public class Audio extends Thread {
         // System.out.println(sourceFile.getAbsolutePath());
 //2定义一个AudioInputStream用于接收输入的音频数据
         AudioInputStream audioInputStream = null;
+        AudioInputStream othersAudioInputStream = null;
 //3使用AudioSystem来获取音频的音频输入流
         try {
             audioInputStream = AudioSystem.getAudioInputStream(sourceFile);
@@ -89,7 +91,10 @@ public class Audio extends Thread {
 
         if (format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
             format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, format.getSampleRate(), 16, format.getChannels(), format.getChannels() * 2, format.getSampleRate(),false);
-            audioInputStream = AudioSystem.getAudioInputStream(format, audioInputStream);
+            othersAudioInputStream = AudioSystem.getAudioInputStream(format, audioInputStream);
+            isWave = false;
+        }else {
+            othersAudioInputStream = audioInputStream;
         }
 
 //        System.out.println(format.toString());
@@ -118,14 +123,19 @@ public class Audio extends Thread {
 //从音频流读取指定的最大数量的数据字节，并将其放入给定的字节数组中。
         try {
             while (nBytesRead != -1 && isRunning) {
-                nBytesRead = audioInputStream.read(abData, 0, abData.length);
+                nBytesRead = othersAudioInputStream.read(abData, 0, abData.length);
 //通过此源数据行将数据写入混频器
                 if (nBytesRead >= 0) {
                     auline.write(abData, 0, nBytesRead);
                     // System.out.println(nBytesRead);
                 } else if (loop) {
                     audioInputStream = AudioSystem.getAudioInputStream(sourceFile);
-                    nBytesRead = audioInputStream.read(abData, 0, abData.length);
+                    if(isWave) {
+                        othersAudioInputStream = audioInputStream;
+                    }else {
+                        othersAudioInputStream = AudioSystem.getAudioInputStream(format, audioInputStream);
+                    }
+                    nBytesRead = othersAudioInputStream.read(abData, 0, abData.length);
                 }
             }
         } catch (IOException ex) {
